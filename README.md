@@ -1,6 +1,6 @@
 # smtp-server-for-it
 
-A simple SMTP server for your integration testing needs. Based on [Spring Boot](http://projects.spring.io/spring-boot/) and [SubEtha SMT](https://code.google.com/p/subethasmtp/), it's perfect to use with browser automation tools such as [SeleniumIDE](http://docs.seleniumhq.org/), since received email messages can be instantly viewed with a HTTP request. This can be useful to test user registration flows that require activation through clicking links on email messages sent by the server.
+A simple SMTP server for your integration testing needs. Based on [Spring Boot](http://projects.spring.io/spring-boot/) and [SubEtha SMT](https://code.google.com/p/subethasmtp/), it's perfect to use with browser automation tools such as [SeleniumIDE](http://docs.seleniumhq.org/), since received email messages can be instantly viewed with a HTTP request. This can be useful to test user registration flows that require activation through clicking links on email messages sent by the server. The project is released under [GNU 3](LICENSE).
  
 **Download latest version
 
@@ -23,5 +23,14 @@ Yes and yes, to choose a different port run with the following args:
 ### 2. How can I access the messages sent to the server?
 
 Through HTTP, there are a few access options (considering that the SMTP started on localhost and listens HTTP connections on 8080 port):
-- http://localhost:8080/email/last: Returns the content of the last sent mail to the SMTP server. 
-- http://localhost:8080/email/\[0...n\]: Returns the content of the nth email sent to the server.
+- To access a given message metadata (id, subject, date, content type, from, to, cc, bcc, etc):
+    - http://localhost:8080/email/\[0...n\]: Returns the metadata of the nth email message sent to the server.
+- To access the message body:
+    - http://localhost:8080/email/body/\[0...n\]: Returns the body of the nth email message sent to the server.
+        
+### 3. Is it possible to change the HTTP port of the web server?
+
+gitYes, since the project is based on [Spring Boot](http://projects.spring.io/spring-boot/) and [SubEtha SMT](https://code.google.com/p/subethasmtp/), any web parameters can be changed through command line, as explained [here](docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html#boot-features-external-config-command-line-args). There are a lot of other parameters that can be configured from the command line, also explained [here](http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html).
+ 
+ 
+
