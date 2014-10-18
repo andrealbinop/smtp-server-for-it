@@ -1,0 +1,29 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.1.8.RELEASE')
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'spring-boot'
+
+jar {
+    baseName = 'smtp-server-for-it'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-web') {
+        exclude module: 'spring-boot-starter-tomcat'
+    }
+    compile('org.springframework.boot:spring-boot-starter-jetty')
+    compile('org.springframework.boot:spring-boot-starter-actuator')
+	compile('org.subethamail:subethasmtp:3.1.7')
+    compile('org.apache.james:apache-mime4j:0.7.2')
+}
