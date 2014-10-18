@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class MailMessage {
+public class MessageMetadata {
 
     private String id;
     private String subject;
@@ -13,6 +13,7 @@ public class MailMessage {
     private List<String> cc;
     private List<String> bcc;
     private String contentType;
+	private String charset;
     private Date date;
 
     public String getId() {
@@ -71,7 +72,15 @@ public class MailMessage {
         this.contentType = contentType;
     }
 
-    public Date getDate() {
+	public String getCharset() {
+		return charset;
+	}
+
+	public void setCharset(String charset) {
+		this.charset = charset;
+	}
+
+	public Date getDate() {
         return date;
     }
 

@@ -13,22 +13,26 @@ The build process requires [Gradle](http://www.gradle.org/).
 
 ## Frequently asked questions
 
-### 1. Can I use a different SMTP port? Is 25 the default port?
-
-Yes and yes, to choose a different port run with the following args:
-    '$ java -jar build/libs/smtp-server-for-it.jar --smtp.port=(other port)' 
-    
-### 2. How can I access the messages sent to the server?
+### 1. How can I access the messages sent to the server?
 
 Through HTTP, there are a few access options (considering that the SMTP started on localhost and listens HTTP connections on 8080 port):
 - To access a given message metadata (id, subject, date, content type, from, to, cc, bcc, etc):
-    - http://localhost:8080/email/\[0...n\]: Returns the metadata of the nth email message sent to the server.
+    - http://localhost:8080/email/\[0...n|\]: Returns the metadata of the nth email message sent to the server.
 - To access the message body:
     - http://localhost:8080/email/body/\[0...n\]: Returns the body of the nth email message sent to the server.
-        
+    
+**Important**: For both aforementioned URIs, the path param **last** can be used instead of the email index, returning the last email sent to the server.
+   
+### 2. Can I use a different SMTP port? Is 25 the default port?
+
+Yes and yes, to choose a different port run with the following args:
+    '$ java -jar build/libs/smtp-server-for-it.jar --smtp.port=(other port)'
+     
 ### 3. Is it possible to change the HTTP port of the web server?
 
-gitYes, since the project is based on [Spring Boot](http://projects.spring.io/spring-boot/) and [SubEtha SMT](https://code.google.com/p/subethasmtp/), any web parameters can be changed through command line, as explained [here](docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html#boot-features-external-config-command-line-args). There are a lot of other parameters that can be configured from the command line, also explained [here](http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html).
+Yes, since the project is based on [Spring Boot](http://projects.spring.io/spring-boot/) and [SubEtha SMT](https://code.google.com/p/subethasmtp/), any web parameters can be changed through command line, as explained [here](docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html#boot-features-external-config-command-line-args). There are a lot of other parameters that can be configured from the command line, also explained [here](http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html).
+
+
  
  
 
