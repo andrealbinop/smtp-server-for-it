@@ -28,7 +28,7 @@ Yes and yes, to choose a different port run with the following args:
      
 ### 3. Is it possible to change the HTTP port of the web server?
 
-Yes, since the project is based on [Spring Boot](http://projects.spring.io/spring-boot/) and [SubEtha SMT](https://code.google.com/p/subethasmtp/), any web parameters can be changed through command line, as explained [here](docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html#boot-features-external-config-command-line-args). There are a lot of other parameters that can be configured from the command line, also explained [here](http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html).
+Yes, since the project is based on [Spring Boot](http://projects.spring.io/spring-boot/), any web parameters can be changed through command line, as explained [here](http://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html#boot-features-external-config-command-line-args). There are a lot of other parameters that can be configured from the command line, also explained [here](http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html).
 
 
  
