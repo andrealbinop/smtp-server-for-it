@@ -50,10 +50,6 @@ public class MailMessageService {
         logger.info("SMTP server stop (was listening on port '{}')", port);
     }
 
-	public MessageDetails getLastMessageDetails() {
-		return getMessageDetails(wiser.getMessages().size() - 1);
-	}
-
 	public MessageDetails getMessageDetails(int index) {
 		return createMessageDetails(index);
 	}
@@ -110,9 +106,14 @@ public class MailMessageService {
 	}
 
 	private WiserMessage getWiserMessage(int index) {
-		if(this.wiser.getMessages().size() <= index) {
+        List<WiserMessage> messages = this.wiser.getMessages();
+        int indexToGet = index;
+        if(index < 0) {
+            indexToGet = messages.size() + index;
+        }
+		if(indexToGet < 0 || messages.size() <= indexToGet) {
 			throw new MailMessageNotFound(index);
 		}
-		return this.wiser.getMessages().get(index);
+		return messages.get(indexToGet);
 	}
 }

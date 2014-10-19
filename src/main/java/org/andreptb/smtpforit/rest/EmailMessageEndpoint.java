@@ -23,28 +23,14 @@ public class EmailMessageEndpoint {
     @Autowired
     private MailMessageService server;
 
-    @RequestMapping("/last")
-    public @ResponseBody MessageMetadata lastEmail() {
-        return server.getLastMessageDetails().getMessageMetadata();
-    }
-
     @RequestMapping("/{index}")
-    public @ResponseBody MessageMetadata emailByIndex(@PathVariable int index) {
+    public @ResponseBody MessageMetadata email(@PathVariable int index) {
         return server.getMessageDetails(index).getMessageMetadata();
     }
 
-	@RequestMapping("/body/last")
-	public ResponseEntity<byte[]> lastEmailBody() {
-		MessageDetails messageDetails = server.getLastMessageDetails();
-		return createMessageBodyResponseEntity(messageDetails);
-	}
-
 	@RequestMapping("/body/{index}")
-	public ResponseEntity<byte[]> emailBodyByIndex(@PathVariable int index) {
-		return createMessageBodyResponseEntity(server.getMessageDetails(index));
-	}
-
-	private ResponseEntity<byte[]> createMessageBodyResponseEntity(MessageDetails messageDetails) {
+	public ResponseEntity<byte[]> emailBody(@PathVariable int index) {
+        MessageDetails messageDetails = server.getMessageDetails(index);
 		byte[] body = messageDetails.getBody();
 		HttpHeaders headers = new HttpHeaders();
 		MessageMetadata messageMetadata = messageDetails.getMessageMetadata();

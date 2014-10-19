@@ -17,11 +17,9 @@ The build process requires [Gradle](http://www.gradle.org/).
 
 Through HTTP, there are a few access options (considering that the SMTP started on localhost and listens HTTP connections on 8080 port):
 - To access a given message metadata (id, subject, date, content type, from, to, cc, bcc, etc):
-    - http://localhost:8080/email/\[0...n|\]: Returns the metadata of the nth email message sent to the server.
+    - http://localhost:8080/email/\[-n...0...n|\]: Returns the metadata of the nth email message sent to the server, supporting negative offset. 
 - To access the message body:
-    - http://localhost:8080/email/body/\[0...n\]: Returns the body of the nth email message sent to the server.
-    
-**Important**: For both aforementioned URIs, the path param **last** can be used instead of the email index, returning the last email sent to the server.
+    - http://localhost:8080/email/body/\[-n...0...n\]: Returns the body of the nth email message sent to the server, supporting negative offset. 
    
 ### 2. Can I use a different SMTP port? Is 25 the default port?
 
