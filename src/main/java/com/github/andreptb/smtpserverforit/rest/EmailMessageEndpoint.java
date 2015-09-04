@@ -1,8 +1,9 @@
-package org.andreptb.smtpforit.rest;
 
-import org.andreptb.smtpforit.dto.MessageDetails;
-import org.andreptb.smtpforit.dto.MessageMetadata;
-import org.andreptb.smtpforit.provider.MailMessageService;
+package com.github.andreptb.smtpserverforit.rest;
+
+import com.github.andreptb.smtpserverforit.dto.MessageDetails;
+import com.github.andreptb.smtpserverforit.dto.MessageMetadata;
+import com.github.andreptb.smtpserverforit.provider.MailMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,17 +21,17 @@ import java.util.Arrays;
 @RequestMapping("/email")
 public class EmailMessageEndpoint {
 
-    @Autowired
-    private MailMessageService server;
+	@Autowired
+	private MailMessageService server;
 
-    @RequestMapping("/{index}")
-    public @ResponseBody MessageMetadata email(@PathVariable int index) {
-        return server.getMessageDetails(index).getMessageMetadata();
-    }
+	@RequestMapping("/{index}")
+	public @ResponseBody MessageMetadata email(@PathVariable int index) {
+		return server.getMessageDetails(index).getMessageMetadata();
+	}
 
 	@RequestMapping("/body/{index}")
 	public ResponseEntity<byte[]> emailBody(@PathVariable int index) {
-        MessageDetails messageDetails = server.getMessageDetails(index);
+		MessageDetails messageDetails = server.getMessageDetails(index);
 		byte[] body = messageDetails.getBody();
 		HttpHeaders headers = new HttpHeaders();
 		MessageMetadata messageMetadata = messageDetails.getMessageMetadata();

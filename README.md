@@ -1,15 +1,25 @@
-# smtp-server-for-it
+# smtp-server-for-it [![Build Status](https://travis-ci.org/andreptb/smtp-server-for-it.svg?branch=master)](https://travis-ci.org/andreptb/smtp-server-for-it)
 
 A simple SMTP server for your integration testing needs. Based on [Spring Boot](http://projects.spring.io/spring-boot/) and [SubEtha SMT](https://code.google.com/p/subethasmtp/), it's perfect to use with browser automation tools such as [SeleniumIDE](http://docs.seleniumhq.org/), since received email messages can be instantly viewed with a HTTP request. This can be useful to test user registration flows that require activation through clicking links on email messages sent by the server. The project is released under [GNU 3](LICENSE).
- 
-## Build and run
 
-The build process requires [Gradle](http://www.gradle.org/).
+## Building and testing
+
+The build process requires [Maven](http://maven.apache.org/).
 
 1. Build:
-    '$ gradle build'
+    '$ mvn package'
 2. Run:
-    '$ java -jar build/libs/smtp-server-for-it.jar'
+    '$ java -jar target/smtp-server-for-it.jar'
+
+## Docker image
+
+Running:
+```
+docker run -d -p 25:25 -p 8080:8080 andreptb/smtp-server-for-it
+```
+
+Supported tags and respective `Dockerfile` links:
+  -	[`0.1.0`, `latest` (*andreptb/smtp-server-for-it*)](https://github.com/andreptb/smtp-server-for-it/blob/master/Dockerfile)    
 
 ## Frequently asked questions
 
@@ -17,20 +27,17 @@ The build process requires [Gradle](http://www.gradle.org/).
 
 Through HTTP, there are a few access options (considering that the SMTP started on localhost and listens HTTP connections on 8080 port):
 - To access a given message metadata (id, subject, date, content type, from, to, cc, bcc, etc):
-    - http://localhost:8080/email/\[-n...0...n|\]: Returns the metadata of the nth email message sent to the server, supporting negative offset. 
+    - http://localhost:8080/email/\[-n...0...n|\]: Returns the metadata of the nth email message sent to the server, supporting negative offset.
 - To access the message body:
-    - http://localhost:8080/email/body/\[-n...0...n\]: Returns the body of the nth email message sent to the server, supporting negative offset. 
-   
-### 2. Can I use a different SMTP port? Is 25 the default port?
+    - http://localhost:8080/email/body/\[-n...0...n\]: Returns the body of the nth email message sent to the server, supporting negative offset.
 
-Yes and yes, to choose a different port run with the following args:
-    '$ java -jar build/libs/smtp-server-for-it.jar --smtp.port=(other port)'
-     
-### 3. Is it possible to change the HTTP port of the web server?
+### 2. Can I use a different SMTP or HTTP port?
 
-Yes, since the project is based on [Spring Boot](http://projects.spring.io/spring-boot/), any web parameters can be changed through command line, as explained [here](http://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html#boot-features-external-config-command-line-args). There are a lot of other parameters that can be configured from the command line, also explained [here](http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html).
-
-
- 
- 
-
+* Running standalone jar:
+```
+java -jar build/libs/smtp-server-for-it.jar --smtp.port=(other smtp port) --server.port=(other http port)
+```
+* With docker the command would be:
+```
+docker run -d -p (other smtp port):25 -p (other http port):8080 andreptb/smtp-server-for-it
+```

@@ -1,4 +1,5 @@
-package org.andreptb.smtpforit.dto;
+
+package com.github.andreptb.smtpserverforit.dto;
 
 public class MessageDetails {
 

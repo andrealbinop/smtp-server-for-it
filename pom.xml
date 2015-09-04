@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.github.andreptb</groupId>
+		<artifactId>andreptb-component-parent</artifactId>
+		<version>0.4.1</version>
+	</parent>
+	<artifactId>smtp-server-for-it</artifactId>
+	<version>0.1.0</version>
+
+	<name>smtp-server-for-it</name>
+	<description>A simple SMTP server for your integration testing needs. Based on Spring Boot and SubEtha SMTP.</description>
+	<url>https://bitbucket.org/pdasoftplanunj/pda-ws</url>
+
+	<developers>
+		<developer>
+			<name>Andre Albino Pereira</name>
+			<url>https://github.com/andreptb</url>
+		</developer>
+	</developers>
+
+	<licenses>
+		<license>
+			<name>The MIT License (MIT)</name>
+			<url>http://opensource.org/licenses/MIT</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<connection>scm:git:git://github.com/andreptb/smtp-server-for-it.git</connection>
+		<developerConnection>scm:git:git@github.com:andreptb/smtp-server-for-it.git</developerConnection>
+		<url>https://github.com/andreptb/smtp-server-for-it</url>
+	</scm>
+
+	<properties>
+		<spring.boot.version>1.2.5.RELEASE</spring.boot.version>
+	</properties>
+
+	<build>
+		<finalName>${project.name}</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${spring.boot.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<version>${spring.boot.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+			<version>${spring.boot.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.subethamail</groupId>
+			<artifactId>subethasmtp</artifactId>
+			<version>3.1.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.james</groupId>
+			<artifactId>apache-mime4j-dom</artifactId>
+			<version>0.7.2</version>
+		</dependency>
+	</dependencies>
+</project>

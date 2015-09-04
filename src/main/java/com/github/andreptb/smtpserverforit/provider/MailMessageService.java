@@ -1,15 +1,19 @@
-package org.andreptb.smtpforit.provider;
 
-import org.andreptb.smtpforit.dto.MessageDetails;
-import org.andreptb.smtpforit.dto.MessageMetadata;
-import org.andreptb.smtpforit.exception.MailMessageNotFound;
-import org.andreptb.smtpforit.exception.MailMessageParseException;
-import org.apache.commons.io.IOUtils;
-import org.apache.james.mime4j.MimeException;
+package com.github.andreptb.smtpserverforit.provider;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 import org.apache.james.mime4j.dom.Body;
 import org.apache.james.mime4j.dom.Message;
 import org.apache.james.mime4j.dom.SingleBody;
-import org.apache.james.mime4j.dom.address.Address;
 import org.apache.james.mime4j.dom.address.AddressList;
 import org.apache.james.mime4j.dom.address.Mailbox;
 import org.apache.james.mime4j.message.DefaultMessageBuilder;
@@ -20,51 +24,47 @@ import org.springframework.stereotype.Component;
 import org.subethamail.wiser.Wiser;
 import org.subethamail.wiser.WiserMessage;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import com.github.andreptb.smtpserverforit.dto.MessageDetails;
+import com.github.andreptb.smtpserverforit.dto.MessageMetadata;
+import com.github.andreptb.smtpserverforit.exception.MailMessageNotFound;
+import com.github.andreptb.smtpserverforit.exception.MailMessageParseException;
 
 @Component
 public class MailMessageService {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
-    private Wiser wiser;
+	private Logger logger = LoggerFactory.getLogger(getClass());
+	private Wiser wiser;
 
-    @Value("${smtp.port:25}")
-    private int port;
+	@Value("${smtp.port:25}")
+	private int port;
 
-    @PostConstruct
-    void start() {
-        this.wiser = new Wiser(port);
-        this.wiser.start();
-    }
+	@PostConstruct
+	void start() {
+		this.wiser = new Wiser(this.port);
+		this.wiser.start();
+	}
 
-    @PreDestroy
-    void stop() {
-        this.wiser.stop();
-        logger.info("SMTP server stop (was listening on port '{}')", port);
-    }
+	@PreDestroy
+	void stop() {
+		this.wiser.stop();
+		this.logger.info("SMTP server stop (was listening on port '{}')", this.port);
+	}
 
 	public MessageDetails getMessageDetails(int index) {
 		return createMessageDetails(index);
 	}
 
-    private MessageDetails createMessageDetails(int index) {
+	private MessageDetails createMessageDetails(int index) {
 		MessageDetails messageDetails = new MessageDetails();
 		try {
 			Message message = parseMessage(index);
 			messageDetails.setMessageMetadata(createMessageMetadata(message, index));
 			messageDetails.setBody(createMessageBody(message));
-		} catch(IOException | RuntimeException e) {
+		} catch (IOException | RuntimeException e) {
 			throw new MailMessageParseException(e);
 		}
-        return messageDetails;
-    }
+		return messageDetails;
+	}
 
 	private MessageMetadata createMessageMetadata(Message message, Object id) {
 		MessageMetadata messageMetadata = new MessageMetadata();
@@ -81,7 +81,7 @@ public class MailMessageService {
 	}
 
 	private List<String> parseMailAddress(AddressList addressList) {
-		if(addressList == null) {
+		if (addressList == null) {
 			return null;
 		}
 		return parseMailAddress(addressList.flatten());
@@ -93,10 +93,10 @@ public class MailMessageService {
 
 	private byte[] createMessageBody(Message message) throws IOException {
 		Body body = message.getBody();
-		if(body instanceof SingleBody) {
-			try (InputStream in = ((SingleBody) body).getInputStream()) {
-				return IOUtils.toByteArray(in);
-			}
+		if (body instanceof SingleBody) {
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			((SingleBody) body).writeTo(out);
+			return out.toByteArray();
 		}
 		throw new MailMessageParseException("Message body not found");
 	}
@@ -106,12 +106,12 @@ public class MailMessageService {
 	}
 
 	private WiserMessage getWiserMessage(int index) {
-        List<WiserMessage> messages = this.wiser.getMessages();
-        int indexToGet = index;
-        if(index < 0) {
-            indexToGet = messages.size() + index;
-        }
-		if(indexToGet < 0 || messages.size() <= indexToGet) {
+		List<WiserMessage> messages = this.wiser.getMessages();
+		int indexToGet = index;
+		if (index < 0) {
+			indexToGet = messages.size() + index;
+		}
+		if (indexToGet < 0 || messages.size() <= indexToGet) {
 			throw new MailMessageNotFound(index);
 		}
 		return messages.get(indexToGet);

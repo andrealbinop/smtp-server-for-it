@@ -1,0 +1,24 @@
+language: java
+jdk:
+- oraclejdk8
+env:
+  global:
+    - M2_REPO: ~/.m2
+    - PARENT_POM_VERSION: 0.4.1
+
+install:
+  - mvn dependency:get -Dartifact=com.github.andreptb:andreptb-component-parent:$PARENT_POM_VERSION:xml:mvn-settings
+  - cp $M2_REPO/repository/com/github/andreptb/andreptb-component-parent/$PARENT_POM_VERSION/andreptb-component-parent-$PARENT_POM_VERSION-mvn-settings.xml $M2_REPO/settings.xml
+  - mvn dependency:resolve dependency:resolve-plugins
+script:
+  - mvn package
+
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key:
+    secure: Yp1t6XGv1P2Z3LDvfhIwfbVDtvtU86jXi5q1JqEmyZab18NTybWfxXH2XKFusUY/jVQJgYYOfn9kpsqa3JgruueqJyxpyVqk/Yi3Wxz2g6p1uMAZfwVgtfZhJqqQijXcN86DLA5g4rHL0g43LXB3NLvx/4FGwJw9zBPN2G88yQ0=
+  file: target/smtp-server-for-it.jar
+  on:
+    tags: true
+    all_branches: true
