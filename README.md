@@ -2,24 +2,24 @@
 
 A simple SMTP server for your integration testing needs. Based on [Spring Boot](http://projects.spring.io/spring-boot/) and [SubEtha SMT](https://code.google.com/p/subethasmtp/), it's perfect to use with browser automation tools such as [SeleniumIDE](http://docs.seleniumhq.org/), since received email messages can be instantly viewed with a HTTP request. This can be useful to test user registration flows that require activation through clicking links on email messages sent by the server. The project is released under [GNU 3](LICENSE).
 
-## Building and testing
+## Docker Image
 
-The build process requires [Maven](http://maven.apache.org/).
+Supported tags and respective `Dockerfile` links:
+  -	[`0.1.0`, `latest` (*andreptb/smtp-server-for-it*)](https://github.com/andreptb/smtp-server-for-it/blob/master/Dockerfile)  
 
-1. Build:
-    '$ mvn package'
-2. Run:
-    '$ java -jar target/smtp-server-for-it.jar'
-
-## Docker image
-
-Running:
+## Running:
 ```
 docker run -d -p 25:25 -p 8080:8080 andreptb/smtp-server-for-it
 ```
 
-Supported tags and respective `Dockerfile` links:
-  -	[`0.1.0`, `latest` (*andreptb/smtp-server-for-it*)](https://github.com/andreptb/smtp-server-for-it/blob/master/Dockerfile)    
+## Building and testing
+
+The build process requires [Maven](http://maven.apache.org/).
+
+1. Building:
+    '$ mvn package'
+2. Running:
+    '$ java -jar target/smtp-server-for-it.jar'
 
 ## Frequently asked questions
 
