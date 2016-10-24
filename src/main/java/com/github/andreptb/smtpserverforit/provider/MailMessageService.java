@@ -4,6 +4,7 @@ package com.github.andreptb.smtpserverforit.provider;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -11,15 +12,17 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import org.apache.james.mime4j.dom.Body;
-import org.apache.james.mime4j.dom.Message;
-import org.apache.james.mime4j.dom.SingleBody;
+import org.apache.james.mime4j.dom.*;
 import org.apache.james.mime4j.dom.address.AddressList;
 import org.apache.james.mime4j.dom.address.Mailbox;
+import org.apache.james.mime4j.message.BodyPart;
 import org.apache.james.mime4j.message.DefaultMessageBuilder;
+import org.apache.james.mime4j.message.MultipartImpl;
+import org.apache.james.mime4j.parser.MimeStreamParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.subethamail.wiser.Wiser;
 import org.subethamail.wiser.WiserMessage;
@@ -74,7 +77,7 @@ public class MailMessageService {
 		messageMetadata.setCc(parseMailAddress(message.getCc()));
 		messageMetadata.setBcc(parseMailAddress(message.getBcc()));
 		messageMetadata.setSubject(message.getSubject());
-		messageMetadata.setContentType(message.getMimeType());
+		messageMetadata.setContentType(MediaType.TEXT_HTML_VALUE);
 		messageMetadata.setCharset(message.getCharset());
 		messageMetadata.setDate(message.getDate());
 		return messageMetadata;
@@ -91,14 +94,30 @@ public class MailMessageService {
 		return mailboxes.stream().map(Mailbox::getAddress).collect(Collectors.toList());
 	}
 
-	private byte[] createMessageBody(Message message) throws IOException {
-		Body body = message.getBody();
-		if (body instanceof SingleBody) {
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
+	private boolean writeToFirstSingleBody(Disposable body, OutputStream out) throws IOException {
+		if(body instanceof SingleBody) {
 			((SingleBody) body).writeTo(out);
-			return out.toByteArray();
+			return true;
 		}
-		throw new MailMessageParseException("Message body not found");
+		if(body instanceof MultipartImpl) {
+			for(Entity childBody : ((MultipartImpl) body).getBodyParts()) {
+				if(writeToFirstSingleBody(childBody, out)) {
+					return true;
+				}
+			}
+		}
+		if(body instanceof BodyPart) {
+			return writeToFirstSingleBody(((BodyPart) body).getBody(), out);
+		}
+		return false;
+	}
+
+	private byte[] createMessageBody(Message message) throws IOException {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		if(!writeToFirstSingleBody(message.getBody(), out)) {
+			throw new MailMessageParseException("Message body not found");
+		}
+		return out.toByteArray();
 	}
 
 	private Message parseMessage(int index) throws IOException {

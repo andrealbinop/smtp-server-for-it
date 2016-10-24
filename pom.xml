@@ -9,7 +9,7 @@
 		<version>0.4.1</version>
 	</parent>
 	<artifactId>smtp-server-for-it</artifactId>
-	<version>0.1.0</version>
+	<version>0.2.0</version>
 
 	<name>smtp-server-for-it</name>
 	<description>A simple SMTP server for your integration testing needs. Based on Spring Boot and SubEtha SMTP.</description>
@@ -37,7 +37,7 @@
 	</scm>
 
 	<properties>
-		<spring.boot.version>1.2.5.RELEASE</spring.boot.version>
+		<spring.boot.version>1.4.0.RELEASE</spring.boot.version>
 	</properties>
 
 	<build>
