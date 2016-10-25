@@ -5,7 +5,7 @@ A simple SMTP server for your integration testing needs. Based on [Spring Boot](
 ## Docker Image
 
 Supported tags and respective `Dockerfile` links:
-  -	[`0.1.0`, `latest` (*andreptb/smtp-server-for-it*)](https://github.com/andreptb/smtp-server-for-it/blob/master/Dockerfile)  
+  -	[`0.2.0`, `latest` (*andreptb/smtp-server-for-it*)](https://github.com/andreptb/smtp-server-for-it/blob/master/Dockerfile)  
 
 ## Running:
 ```
